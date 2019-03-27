@@ -1,0 +1,17 @@
+DS_Store
+Thumbs.db
+*.class
+*.cache
+*.war
+*.ear
+target/*
+logs/*
+hs_err_pid*
+/target/
+/.project/
+.settings
+.idea/
+*.iml
+output/*
+classes
+*.log

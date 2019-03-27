@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: lck-test-cos-biz-log
+
+
+eureka:
+  client:
+    registry-fetch-interval-seconds: 5
+    enabled: true
+    serviceUrl:
+      defaultZone: http://eureka-test.idc.yst.com.cn:8080/eureka/
+  # 注册中心配置
+  instance:
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+
+#ribbon
+ribbon:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  # ribbon 超时
+  ReadTimeout: 6000
+  ConnectTimeout: 3000
+  # 同一个ip服务重试次数
+  MaxAutoRetries: 0
+  # 相同服务不同ip切换次数
+  MaxAutoRetriesNextServer: 1
+#  熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+
+bizlog:
+  modules:
+    - name: HEIHEI
+      type: 1
+      desc: 2
+    - name: GOGO
+      type: 3
+      desc: 4
