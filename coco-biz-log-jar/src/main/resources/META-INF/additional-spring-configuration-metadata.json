@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "coco.host",
+      "type": "java.lang.String",
+      "sourceType": "java.lang.String",
+      "description": "coco server host address..."
+    }
+  ],
+  "properties": [
+    {
+      "name": "coco.host",
+      "type": "java.lang.String",
+      "sourceType": "java.lang.String",
+      "description": "coco server host address..."
+    }
+  ],
+  "hints": [
+  ]
+}
+
+

@@ -1,0 +1,83 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: coco-biz-log
+  datasource:
+    druid: #连接池信息
+      initial-size: 5
+      max-active: 100
+      min-idle: 5
+      max-wait: 60000
+      validation-query: SELECT 1 FROM DUAL
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #配置扩展插件，常用的插件有=>stat:监控统计  log4j:日志  wall:防御sql注入
+      filters: stat,wall,log4j2
+      # 配置日志输出
+      filter:
+        slf4j:
+          enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
+  profiles:
+    active: dev
+
+mybatis:
+  typeAliasesPackage: com.coco.terminal.cocobizlog.dal.domain
+  mapperLocations: classpath:mapper/*.xml
+#ribbon
+ribbon:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  # ribbon 超时
+  ReadTimeout: 6000
+  ConnectTimeout: 3000
+  # 同一个ip服务重试次数
+  MaxAutoRetries: 0
+  # 相同服务不同ip切换次数
+  MaxAutoRetriesNextServer: 1
+#  熔断器
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+# 注册中心配置
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5
+  client:
+    registry-fetch-interval-seconds: 5
+    enabled: true
+
+# 线程池配置
+executor:
+  core-pool-size: 4
+  queue-capacity: 100
+  max-pool-size: 30
+  keep-alive-time: 60000
+
+
+# es 索引 前缀
+coco:
+  biz:
+    log:
+      es-prefix: coco-biz-log
+
+
+

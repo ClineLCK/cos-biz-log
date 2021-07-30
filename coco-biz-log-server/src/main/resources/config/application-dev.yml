@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    url: jdbc:mysql://10.212.1.10:3306/cosmetic_pss?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;autoReconnectForPools=true
+    username: cosmetic_pss
+    password: cosmetic2017test
+
+
+
+apollo:
+  #meta和config是部署在同一个JVM进程，所以meta server的地址就是config service的地址
+  meta: http://apollo-config-server-dev.**.com.cn:8080
+  #集群
+  #  cluster: SHAOY
+  # will inject 'application' namespace in bootstrap phase
+  bootstrap:
+    enabled: true
+    #命令空间 有优先级
+    namespaces: B2B.public
+  cacheDir: /home/admin/apolloCache
+
+
+
+
+
+# rocketMq 配置信息
+coco:
+  bizlog:
+    rocketMq:
+      producer:
+        groupName: cos-log-producer
+        namesrvAddr: 10.213.8.144:9876
+        topic: cos-biz-log
+#        retryTimes: 2
+      consumer:
+        groupName: cos-log-consumer
+        namesrvAddr: 10.213.8.144:9876
+        topic: cos-biz-log
+#    retryTimes: 3
+#    threadMin: 20
+#    threadMax: 64
+#    messageBatchMaxSize: 1
+
+elasticsearch:
+  host: 10.213.10.176:9200;
+  port: 9200
+  scheme: http

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>coco-biz-log-jar</artifactId>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.2</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>2.6</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>2.5.3</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <id>attach-sources</id>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.coco.terminal</groupId>
+      <artifactId>coco-biz-log-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-starter-aop</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>spring-boot-starter-logging</artifactId>
+          <groupId>org.springframework.boot</groupId>
+        </exclusion>
+      </exclusions>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <groupId>org.slf4j</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>fastjson</artifactId>
+      <groupId>com.alibaba</groupId>
+      <version>1.2.28</version>
+    </dependency>
+
+    <!--解决threadLocal 线程池值共享问题-->
+    <dependency>
+      <artifactId>transmittable-thread-local</artifactId>
+      <groupId>com.alibaba</groupId>
+      <version>2.6.1</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>javax.servlet-api</artifactId>
+      <groupId>javax.servlet</groupId>
+      <version>3.1.0</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>okhttp</artifactId>
+      <groupId>com.squareup.okhttp3</groupId>
+      <version>3.14.0</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>reflectasm</artifactId>
+      <groupId>com.esotericsoftware</groupId>
+      <version>1.11.3</version>
+    </dependency>
+
+
+
+    <!-- test -->
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-starter-logging</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <groupId>org.springframework.cloud</groupId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${spring-cloud.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>nexus</id>
+      <name>releases</name>
+      <url>http://pmp.yst.com.cn:8081/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <name>snapshots</name>
+      <uniqueVersion>false</uniqueVersion>
+      <url>http://pmp.yst.com.cn:8081/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <parent>
+    <artifactId>coco-biz-log</artifactId>
+    <groupId>com.coco.terminal</groupId>
+    <version>1.1.4-SNAPSHOT</version>
+  </parent>
+
+<!--  <parent>-->
+<!--    <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--    <groupId>org.springframework.boot</groupId>-->
+<!--    <relativePath />-->
+<!--    <version>1.5.14.RELEASE</version> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--  </parent>-->
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <maven.test.skip>true</maven.test.skip>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <spring-cloud.version>Edgware.SR3</spring-cloud.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>Nexus</id>
+      <name>Nexus Public Repository</name>
+      <url>http://pmp.yst.com.cn:8081/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
+
+
+  <scm>
+    <connection>scm:git:git@gitlab.yst.com.cn:ckli01/cos-biz-log.git</connection>
+    <developerConnection>scm:git:git@gitlab.yst.com.cn:ckli01/cos-biz-log.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>git@gitlab.yst.com.cn:ckli01/cos-biz-log.git</url>
+  </scm>
+
+
+
+
+</project>

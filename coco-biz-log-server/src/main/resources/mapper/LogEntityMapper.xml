@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coco.terminal.cocobizlog.dal.mapper.LogEntityMapper">
+    <resultMap id="BaseResultMap" type="com.coco.terminal.cocobizlog.bean.LogEntityDO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="module" property="module" jdbcType="INTEGER"/>
+        <result column="event" property="event" jdbcType="INTEGER"/>
+        <result column="entity" property="entity" />
+        <result column="oper_id" property="operId" jdbcType="VARCHAR"/>
+        <result column="date" property="date" jdbcType="TIMESTAMP"/>
+        <result column="oper_ip" property="operIp" jdbcType="VARCHAR"/>
+        <result column="service_name" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="machine_ip" property="machineIp" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id,module,event,entity,oper_id,date,oper_ip,service_name,machine_ip
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.coco.terminal.cocobizlog.bean.LogEntityDO">
+    insert into t_cos_log (id,module,event,entity,oper_id,date,oper_ip,service_name,machine_ip
+      )
+    values (#{id}, #{module}, #{event},#{entity}, #{operId}, #{date},#{operIp},#{serviceName},#{machineIp}
+      )
+    </insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into t_cos_log (id,module,event,entity,oper_id,date,oper_ip,service_name,machine_ip)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.module}, #{item.event},#{item.entity}, #{item.operId}, #{item.date},#{item.operIp},
+            #{item.serviceName},#{item.machineIp})
+        </foreach>
+    </insert>
+    <insert id="insertCurrent" parameterType="com.coco.terminal.cocobizlog.dal.domain.LogEntityDomain">
+        insert into t_cos_log_${year}_${month}
+        (id,module,event,entity,oper_id,date,oper_ip,service_name,machine_ip)
+        values
+            (#{id}, #{module}, #{event},#{entity}, #{operId}, #{date},#{operIp},#{serviceName},#{machineIp})
+    </insert>
+
+
+    <update id="initTable">
+        CREATE TABLE t_cos_log_${year}_${month}
+        (
+            id           bigint auto_increment comment '主键Id'
+                primary key,
+            module       int(3)         not null comment '日志模块(根据业务不断更新) 0-系统 1-门店管理 2-片区管理',
+            event        int            null comment '日志事件(根据业务不断更新) 1-添加 2-修改 3-删除',
+            entity       text  null comment '日志实体内容',
+            oper_id      varchar(64)    not null comment '操作人Id',
+            date         timestamp      null comment '操作时间',
+            oper_ip      varchar(64)    null comment '操作人Ip地址',
+            service_name varchar(64)    null comment '服务名',
+            machine_ip   varchar(64)    null comment '服务器Ip',
+            KEY idx_service_module_event (service_name, module, event) comment '唯一'
+        )
+    </update>
+
+    <select id="existTable" resultType="int">
+        select count(*) from information_schema.TABLES where table_name =  't_cos_log_${year}_${month}'
+    </select>
+
+</mapper>

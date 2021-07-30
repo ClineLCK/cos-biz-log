@@ -1,0 +1,159 @@
+# 共有8个级别，按照从低到高为：ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF。
+
+Configuration:
+  status: WARN
+  monitorInterval: 30
+
+  Properties: # 定义全局变量
+    Property: # 缺省配置（用于开发环境）。其他环境需要在VM参数中指定，如下：
+    #测试：-Dlog.level.console=warn -Dlog.level.xjj=trace
+    #生产：-Dlog.level.console=warn -Dlog.level.xjj=info
+    - name: log.level.console
+      value: info
+    - name: log.level.exception
+      value: error
+    - name: log.level.runTimeCount
+      value: info
+    - name: log.level.druid
+      value: info
+    - name: log.path
+      value: coco-biz-log
+    - name: project.name
+      value: coco-biz-log
+    - name: log.pattern
+      value: "%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-30.30C{1.} : %m%n"
+
+  Appenders:
+    Console:  #输出到控制台
+      name: CONSOLE
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${log.pattern}
+    #   启动日志
+    RollingFile:
+    - name: ROLLING_FILE
+      fileName: ${log.path}/output/${project.name}.log
+      filePattern: "${log.path}/output/$${date:yyyy-MM}/$${date:dd}/${project.name}-%d{yyyy-MM-dd}-%i.log.gz"
+      PatternLayout:
+        pattern: ${log.pattern}
+      Filters:
+        # 一定要先去除不接受的日志级别，然后获取需要接受的日志级别
+        ThresholdFilter:
+        - level: WARN
+          onMatch: DENY
+          onMismatch: NEUTRAL
+        - level: info
+          onMatch: ACCEPT
+          onMismatch: DENY
+      Policies:
+        TimeBasedTriggeringPolicy:  # 按天分类
+          modulate: true
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: 100MB
+      DefaultRolloverStrategy:     # 同文件夹文件最多50个
+        Delete:
+          basePath: "${log.path}/output/"
+          maxDepth: 3
+          IfFileName:
+            glob: "*/*/${project.name}-*-*.log.gz"
+          IfLastModified:
+            age: 30d
+        max: 50
+    #   错误日志
+    - name: EXCEPTION_ROLLING_FILE
+      ignoreExceptions: false
+      fileName: ${log.path}/output/${project.name}-exception.log
+      filePattern: "${log.path}/output/$${date:yyyy-MM}/$${date:dd}/${project.name}-exception-%d{yyyy-MM-dd}-%i.log.gz"
+      Filters:
+        ThresholdFilter:
+          level: WARN
+          onMatch: ACCEPT
+          onMismatch: DENY
+      PatternLayout:
+        pattern: ${log.pattern}
+      Policies:
+        TimeBasedTriggeringPolicy:  # 按天分类
+          modulate: true
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: 100MB
+      DefaultRolloverStrategy:     # 文件最多100个
+        max: 100
+        Delete:
+          basePath: "${log.path}/output/"
+          maxDepth: 3
+          IfFileName:
+            glob: "*/*/${project.name}-exception-*-*.log.gz"
+          IfLastModified:
+            age: 30d
+    #   runTimeCount
+    - name: RUNTIMECOUNT_ROLLING_FILE
+      fileName: ${log.path}/runTimeCount/${project.name}-runTimeCount.log
+      filePattern: "${log.path}/runTimeCount/$${date:yyyy-MM}/$${date:dd}/${project.name}-runTimeCount-%d{yyyy-MM-dd}-%i.log.gz"
+      PatternLayout:
+        pattern: ${log.pattern}
+      Policies:
+        TimeBasedTriggeringPolicy:  # 按天分类
+          modulate: true
+          interval: 1
+      DefaultRolloverStrategy:     # 文件最多100个
+        max: 100
+    #   sql 日志
+    - name: DRUID_ROLLING_FILE
+      fileName: ${log.path}/output/${project.name}-druid.log
+      filePattern: "${log.path}/output/$${date:yyyy-MM}/$${date:dd}/${project.name}-druid-%d{yyyy-MM-dd}-%i.log.gz"
+      PatternLayout:
+        pattern: ${log.pattern}
+      Policies:
+        TimeBasedTriggeringPolicy:  # 按天分类
+          modulate: true
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: 100MB
+      DefaultRolloverStrategy:     # 文件最多100个
+        max: 100
+        Delete:
+          basePath: "${log.path}/output/"
+          maxDepth: 3
+          IfFileName:
+            glob: "*/*/${project.name}-druid-*-*.log.gz"
+          IfLastModified:
+            age: 30d
+
+  Loggers:
+    Root:
+      level: ${log.level.console}
+      AppenderRef:
+      - ref: CONSOLE
+      - ref: ROLLING_FILE
+      - ref: EXCEPTION_ROLLING_FILE
+
+    Logger:
+    - name: exception
+      level: ${log.level.exception}
+      additivity: false
+      AppenderRef:
+      - ref: CONSOLE
+      - ref: EXCEPTION_ROLLING_FILE
+
+    - name: runTimeCount
+      level: ${log.level.runTimeCount}
+      additivity: false
+      AppenderRef:
+      - ref: RUNTIMECOUNT_ROLLING_FILE
+
+    - name: druid.sql.Statement
+      level: ${log.level.druid}
+      additivity: false
+      AppenderRef:
+      - ref: DRUID_ROLLING_FILE
+
+#    监听具体包下面的日志
+#    Logger: # 为com.xjj包配置特殊的Log级别，方便调试
+#      - name: com.xjj
+#        additivity: false
+#        level: ${sys:log.level.xjj}
+#        AppenderRef:
+#          - ref: CONSOLE
+#          - ref: ROLLING_FILE
