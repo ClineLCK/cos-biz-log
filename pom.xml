@@ -76,9 +76,9 @@
 
 
 	<scm>
-		<connection>scm:git:git@gitlab.yst.com.cn:ckli01/coco-biz-log</connection>
-		<url>git@gitlab.yst.com.cn:ckli01/coco-biz-log</url>
-		<developerConnection>scm:git:git@gitlab.yst.com.cn:ckli01/coco-biz-log</developerConnection>
+		<connection>scm:git:git@github.com:ClineLCK/cos-biz-log</connection>
+		<url>git@github.com:ClineLCK/cos-biz-log</url>
+		<developerConnection>scm:git:git@github.com:ClineLCK/cos-biz-log</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -103,6 +103,9 @@
 			<url>http://pmp.yst.com.cn:8081/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
+
+
+
 
 	<build>
 		<plugins>
