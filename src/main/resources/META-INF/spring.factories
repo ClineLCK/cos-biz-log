@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.nfsq.framework.cosbizlog.config.CosBizLogAutoConfigure
+com.coco.framework.cosbizlog.config.CosBizLogAutoConfigure
