@@ -33,6 +33,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.CollectionUtils;
@@ -63,6 +64,7 @@ public class BizLogAop {
 
 
     @Autowired
+    @Qualifier(value = "coco-biz-log-thread")
     private Executor executor;
     @Autowired
     private Environment environment;
