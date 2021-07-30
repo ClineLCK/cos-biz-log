@@ -58,7 +58,6 @@ public class CosBizLogAutoConfigure {
 
 
   @Bean(name = "coco-biz-log-thread")
-  @ConditionalOnMissingBean(value = {Executor.class, ThreadPoolTaskExecutor.class})
   public Executor executor(CosBizLogTaskExecutorProperties cosBizLogTaskExecutorProperties) {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
